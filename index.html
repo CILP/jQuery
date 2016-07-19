@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jquery/jquery.js"></script>
+    <script src="jquery/jquery-ui.js"></script>
+    <link href="jquery/jquery-ui.css" type="text/css" rel="stylesheet" />
+
+    <!-- meta en utf-8 importante para mostrar acentos correctamente -->
+    <meta charset="utf-8" />
+
+    <style type="text/css">
+      .resaltar a {
+        background-color: #fedebc !important;
+        color: white !important;
+      }
+      .limites a {
+        background-color: orange !important;
+        color: white !important;
+      }
+    </style>
+    <script type="text/javascript">
+      $(function(){
+
+        // Establecemos los datepicker en español
+        $.datepicker.regional['es'] = {
+           closeText: 'Cerrar',
+           prevText: '<Ant',
+           nextText: 'Sig>',
+           currentText: 'Hoy',
+           monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+           monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+           dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+           dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+           dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+           weekHeader: 'Sm',
+           dateFormat: 'dd/mm/yy',
+           firstDay: 1,
+           isRTL: false,
+           showMonthAfterYear: false,
+           yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $("#from").datepicker({
+          minDate: 0,
+          changeMonth: false,
+          numberOfMonths: 2,
+          onSelect: function(date, instance){
+
+            // Seteamos el limite para la fecha de salida
+            // le agregamos 30 dias al dia seleccionado.
+            //var limite = new Date(new Date(date).getTime());
+            //limite.setDate(limite.getDate()+30);
+
+            //$("#to").datepicker("option", "maxDate", limite)
+
+            // Abrimos el datepicker
+            setTimeout(function(){
+              $("#to").focus();
+            }, 200);
+          }
+        });
+
+        $("#to").datepicker({
+          minDate: 0,
+          maxDate: 30,
+          numberOfMonths: 2,
+          changeMonth: false,
+          beforeShowDay: function(date){
+            var fechaInicio = $("#from").datepicker("getDate");
+            var fechaFin = $(this).datepicker("getDate");
+
+            if (fechaFin){
+
+              // Pintamos la fecha inicio y la fecha fin de un color diferente
+              if (date.getTime() === fechaInicio.getTime() || date.getTime() === fechaFin.getTime()){
+                return [true, 'limites'];
+              }
+
+              // Pintamos solo las fechas que estan en el rango de inicio y fin de
+              // un color claro
+              if (date.getTime() > fechaInicio.getTime() && date.getTime() < fechaFin.getTime()){
+                return [true, 'resaltar'];
+              }
+            }
+
+            return [true, ''];
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <label for="from">From</label>
+    <input type="text" id="from" name="from" placeholder="Entrada">
+    <label for="to">to</label>
+    <input type="text" id="to" name="to" placeholder="Salida">
+  </body>
+</html>
