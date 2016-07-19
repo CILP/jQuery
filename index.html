@@ -58,10 +58,11 @@
 
             // Seteamos el limite para la fecha de salida
             // le agregamos 30 dias al dia seleccionado.
-            //var limite = new Date(new Date(date).getTime());
-            //limite.setDate(limite.getDate()+30);
+            // var limite = new Date(new Date(date).getTime());
+            // limite.setDate(limite.getDate()+30);
 
-            //$("#to").datepicker("option", "maxDate", limite)
+            // $("#to").datepicker("option", "maxDate", limite)
+            // $("#to").datepicker( "refresh" );
 
             // Abrimos el datepicker
             setTimeout(function(){
@@ -72,6 +73,17 @@
             var fechaInicio = $(this).datepicker("getDate");
             var fechaFin = $("#to").datepicker("getDate");
 
+            // Pintamos el rango seleccionaodo
+            // asi como la fecha fin seleccionada
+            if (fechaFin && fechaInicio){
+
+              // Pintamos solo las fechas que estan en el rango de inicio y fin de
+              // un color naranja claro
+              if (date.getTime() > fechaInicio.getTime() && date.getTime() < fechaFin.getTime()){
+                return [true, 'resaltar'];
+              }
+            }
+
             if (fechaInicio){
 
               // Pintamos el dia de inicio con naranja
@@ -80,16 +92,11 @@
               }
             }
 
-            // Pintamos el rango seleccionaodo
-            // asi como la fecha fin seleccionada
             if (fechaFin){
 
-              // Pintamos la fecha inicio y la fecha fin de un color diferente
-              if (date.getTime() === fechaInicio.getTime() || date.getTime() === fechaFin.getTime()){
+              // Pintamos el dia de fin con naranja
+              if (date.getTime() === fechaFin.getTime()){
                 return [true, 'limites'];
-              }
-              if (date.getTime() > fechaInicio.getTime() && date.getTime() < fechaFin.getTime()){
-                return [true, 'resaltar'];
               }
             }
 
@@ -99,29 +106,32 @@
 
         $("#to").datepicker({
           minDate: 0,
-          maxDate: 30,
           numberOfMonths: 2,
           changeMonth: false,
           beforeShowDay: function(date){
             var fechaInicio = $("#from").datepicker("getDate");
             var fechaFin = $(this).datepicker("getDate");
 
-            // // Pintamos el dia de inicio
-            if (date.getTime() === fechaInicio.getTime()){
-              return [true, 'limites'];
-            }
-
-            if (fechaFin){
-
-              // Pintamos la fecha inicio y la fecha fin de un color diferente
-              if (date.getTime() === fechaInicio.getTime() || date.getTime() === fechaFin.getTime()){
-                return [true, 'limites'];
-              }
+            if (fechaFin && fechaInicio){
 
               // Pintamos solo las fechas que estan en el rango de inicio y fin de
               // un color claro
               if (date.getTime() > fechaInicio.getTime() && date.getTime() < fechaFin.getTime()){
                 return [true, 'resaltar'];
+              }
+            }
+
+            // Pintamos el dia de fin con naranja
+            if (fechaFin){
+              if (date.getTime() === fechaFin.getTime()){
+                return [true, 'limites'];
+              }
+            }
+
+            // Pintamos el dia de inicio con naranja
+            if (fechaInicio){
+              if (date.getTime() === fechaInicio.getTime()){
+                return [true, 'limites'];
               }
             }
 
